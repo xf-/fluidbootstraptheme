@@ -1,12 +1,9 @@
-{namespace v=Tx_Vhs_ViewHelpers}
-{namespace flux=FluidTYPO3\Flux\ViewHelpers}
-
 <f:layout name="Content" />
 
-<div xmlns="http://www.w3.org/1999/xhtml"
-	 xmlns:v="http://fedext.net/ns/vhs/ViewHelpers"
-	 xmlns:flux="http://fedext.net/ns/flux/ViewHelpers"
-	 xmlns:f="http://typo3.org/ns/fluid/ViewHelpers">
+<div xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:flux="http://typo3.org/ns/FluidTYPO3/Flux/ViewHelpers">
+
 	<f:section name="Configuration">
 		{v:var.typoscript(path: 'plugin.tx_fluidcontentbootstrap.settings') -> v:var.set(name: 'settings')}
 		{f:if(condition: settings.gridColumns, then: settings.gridColumns, else: 12) -> v:var.set(name:
@@ -47,4 +44,5 @@
 	</f:section>
 
 	<f:section name="Value">col-md-{iteration.cycle}{f:if(condition: iteration.isLast, else: ',')}</f:section>
+
 </div>
