@@ -1,0 +1,83 @@
+<f:layout name="FCE"/>
+
+<div xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:flux="http://typo3.org/ns/FluidTYPO3/Flux/ViewHelpers">
+
+    <f:section name="Configuration">
+        <flux:form wizardTab="Bootstrap" id="timeLine" label="Time Line"
+                   description="Facebook like Time Line (Please press save bevor you add Time Line Items!)"
+                   icon="{v:extension.path.resources(path: 'Icons/bootstrap/glyphicons_057_history.png')}">
+            <flux:form.sheet name="timeLineGeneral" label="General Settings">
+                <flux:field.input name="settings.timeLineHeadline" label="Timeline Headline"/>
+            </flux:form.sheet>
+            <flux:form.sheet name="timeLineItems" label="Time Line Items">
+                <flux:form.section name="timeLineSection" label="TimeLine Items">
+                    <flux:form.object name="timeLineObject" label="TimeLine Item">
+                        <flux:field.checkbox name="timeLineObjPos" label="Box position right" default="0"/>
+                        <flux:field.input name="timeLineObjTime" label="Time Stamp" size="6"/>
+                        <flux:field.file
+                                name="timeLineObjImg"
+                                label="Choose a Image (optional)"
+                                showThumbnails="true"
+                                allowed="jpg,jpeg,png,gif,JPEG,GIF,PNG,JPG"
+                                required="true"
+                                maxItems="1"
+                                size="1"
+                                />
+                        <flux:field.input name="timeLineObjFooter" label="Footer Text"/>
+                    </flux:form.object>
+                </flux:form.section>
+            </flux:form.sheet>
+            <flux:grid>
+                <f:for each="{timeLineSection}" as="timeLineBeGrid">
+                    <flux:grid.row>
+                        <flux:grid.column name="timeLineID.{timeLineBeGrid.timeLineObject.id}"
+                                          label="Position: {f:if(then: 'RIGHT', else: 'LEFT', condition: timeLineBeGrid.timeLineObject.timeLineObjPos)} | Footer: {timeLineBeGrid.timeLineObject.timeLineObjFooter} | ID# {timeLineBeGrid.timeLineObject.id}" />
+                    </flux:grid.row>
+                </f:for>
+            </flux:grid>
+        </flux:form>
+    </f:section>
+
+    <f:section name="Preview">
+        <flux:widget.grid/>
+    </f:section>
+
+    <f:section name="Main">
+        <v:asset.style name="TimeLineCSS" path="EXT:fluidbootstraptheme/Resources/Public/Stylesheets/timeLine.css" />
+        <v:asset.script name="TimeLineJS" path="EXT:fluidbootstraptheme/Resources/Public/Javascript/timeLine.js" allowMoveToFooter="1" />
+        <div class="page-header text-center">
+            <h1 id="timeline">{settings.timeLineHeadline}</h1>
+        </div>
+        <ul class="timeline">
+            <f:for each="{timeLineSection}" as="timeLineItem" iteration="iteration">
+                <li class="{f:if(then: 'timeline-inverted', else: 'timeline-regular', condition: timeLineItem.timeLineObject.timeLineObjPos)}">
+                    <f:render section="TimeLineItem" arguments="{_all}"/>
+                </li>
+            </f:for>
+        </ul>
+    </f:section>
+
+
+    <f:section name="TimeLineItem">
+        <div class="timeline-badge primary"><a><i class="glyphicon glyphicon-record" rel="tooltip"
+                                                  title="{timeLineItem.timeLineObject.timeLineObjTime}" id=""></i></a>
+        </div>
+        <div class="timeline-panel">
+            <f:if condition="{timeLineItem.timeLineObject.timeLineObjImg}">
+                <f:then>
+                    <div class="timeline-heading">
+                        <f:image src="{timeLineItem.timeLineObject.timeLineObjImg}" alt="123" class="img-responsive"/>
+                    </div>
+                </f:then>
+            </f:if>
+            <div class="timeline-body">
+                <flux:content.render area="timeLineID.{timeLineItem.timeLineObject.id}"/>
+            </div>
+            <div class="timeline-footer">
+                <h5 class="pull-right">{timeLineItem.timeLineObject.timeLineObjFooter}</h5>
+            </div>
+        </div>
+    </f:section>
+</div>
